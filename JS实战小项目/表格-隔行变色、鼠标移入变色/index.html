@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>表格-隔行变色，鼠标移入变色</title>
+    <style>
+    .wrapper{
+      margin: 250px 600px;
+    }
+    </style>
+    <script type="text/javascript">
+    window.onload=function(){
+
+      //DOM的高级操作中有对表格的简化操作，先看原始的JS如何获取到表格中小红这个元素
+       var oTab=document.getElementById('tlb1');
+      // alert(oTab.getElementsByTagName('tbody')[0].getElementsByTagName('tr')[0]
+      // .getElementsByTagName('td')[1].innerHTML);  //返回小红
+
+      //但是有更方便的做法，得到的结果与上面一致
+      //也就是说：getElementsByTagName('tbody')[0]=tBodies[0]
+      // getElementsByTagName('tr')[0]=rows[0]
+      // getElementsByTagName('td')[1]=cells[1]
+      // alert(oTab.tBodies[0].rows[0].cells[1].innerHTML);
+      ///////////////////////////////////////////////////////////////////
+
+      //表格隔行变色
+      var oldColor='';
+      for(var i=0;i<oTab.tBodies[0].rows.length;i++){
+        oTab.tBodies[0].rows[i].onmouseover=function(){  //鼠标移入一行，一行就变成绿色
+          oldColor=this.style.background;  //把原来的颜色先存起来
+          this.style.background='green';
+        }
+        oTab.tBodies[0].rows[i].onmouseout=function(){  //鼠标移出，又恢复原来的颜色
+          this.style.background=oldColor;
+        }
+        if(i%2){
+          oTab.tBodies[0].rows[i].style.background='#ccc';
+        }
+        else{
+          oTab.tBodies[0].rows[i].style.background='';
+        }
+      }
+      //////////////////////////////////////////////////////////////////////////
+
+      //添加／删除一行
+      var oName=document.getElementById('name');
+      var oAge=document.getElementById('age');
+      var oBut=document.getElementById('but');
+      var id=oTab.tBodies[0].rows.length+1;
+
+      //点击添加按钮就增加一行
+      oBut.onclick=function(){
+        var oTr=document.createElement('tr');  //先创建一行
+
+        var oTd=document.createElement('td');
+        oTd.innerHTML=id++;
+        oTr.appendChild(oTd);         //创建写ID的那一个td，并插入一行
+
+        var oTd=document.createElement('td');
+        oTd.innerHTML=oName.value;
+        oTr.appendChild(oTd);        //创建写名字的那一个td，并插入一行
+
+        var oTd=document.createElement('td');
+        oTd.innerHTML=oAge.value;
+        oTr.appendChild(oTd);       //创建写年龄的那一个td，并插入一行
+
+        var oTd=document.createElement('td');
+        oTd.innerHTML='<a href="javascript:;">删除</a>';
+        oTr.appendChild(oTd);        //创建操作的那一个td，并插入一行
+
+        oTab.tBodies[0].appendChild(oTr); //把创建好的那一行插入到表格中
+      };
+      ///////////////////////////////////////////////////////////////////
+
+      //点击删除按钮就删除那一行
+      var oA=document.getElementsByTagName('a');
+      for(var i=0;i<oA.length;i++){
+        oA[i].onclick=function(){
+          oTab.tBodies[0].removeChild(this.parentNode.parentNode);
+        }
+      }
+      //////////////////////////////////////////////////////////////////
+
+      //搜索表格的内容
+      var oBtn1=document.getElementById('but1');
+      var oldColor1='';
+      for(var i=0;i<oTab.tBodies[0].rows.length;i++){
+        oBtn1.onclick=function(){
+            for(var i=0;i<oTab.tBodies[0].rows.length;i++){
+                var sTab=oTab.tBodies[0].rows[i].cells[1].innerHTML.toLowerCase(); //忽略大小写
+                var sTxt=oName.value.toLowerCase(); //忽略大小写，全部转化成小写
+                var arr=sTxt.split(' '); //用空格把要搜的字符串分开
+              //实现模糊搜索  search()--找到并返回字符串出现的位置，没找到就返回-1
+              // if(sTab.search(sTxt)!=-1)
+              // {
+              //   oldColor1=oTab.tBodies[0].rows[i].style.background;
+              //   oTab.tBodies[0].rows[i].style.background='yellow';
+              // }
+              // else{
+              //   oTab.tBodies[0].rows[i].style.background=oldColor1;
+              // }
+
+              //实现多关键字搜索
+              for(var j=0;j<arr.length;j++){
+                if(sTab.search(arr[j])!=-1){
+                  oldColor1=oTab.tBodies[0].rows[i].style.background;
+                  oTab.tBodies[0].rows[i].style.background='yellow';
+                }
+              };
+            };
+        };
+      };
+      ///////////////////////////////////////////////////////////////////////
+
+
+
+    }
+    </script>
+  </head>
+  <body>
+    <div class='wrapper'>
+      姓名：<input type="text" id='name'>
+      年龄：<input type="text" id='age'>
+      <button type="button" name="button" id='but'>添加</button>
+      <button type="button" name="button" id='but1'>搜索</button>
+      <table id='tlb1' border="1px" width="450px">
+        <thead>
+          <td>ID</td>
+          <td>name</td>
+          <td>age</td>
+          <td>操作</td>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>QWaa</td>
+            <td>21</td>
+            <td><a href="javascript:;">删除</a></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>小明</td>
+            <td>22</td>
+            <td><a href="javascript:;">删除</a></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>小黑</td>
+            <td>20</td>
+            <td><a href="javascript:;">删除</a></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>小黄</td>
+            <td>10</td>
+            <td><a href="javascript:;">删除</a></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>小何</td>
+            <td>18</td>
+            <td><a href="javascript:;">删除</a></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>大明</td>
+            <td>18</td>
+            <td><a href="javascript:;">删除</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
