@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>实现表格排序</title>
+    <style>
+    #ul1{
+      background: green;
+    }
+    </style>
+    <script type="text/javascript">
+    window.onload=function(){
+      var oUl=document.getElementById('ul1');
+      var oBtn=document.getElementById('but1');
+      var aLi=document.getElementsByTagName('li'); //aLi不是真正的数组，只是一个元素集合
+      var arr=[];
+
+      //实现对li的排序
+      oBtn.onclick=function(){
+        for(var i=0;i<aLi.length;i++){
+          arr[i]=aLi[i];  //把aLi中的元素都变成数组，aLi无法使用sort(),因为他不是真正的数组
+        }
+        arr.sort(function(li1,li2){
+          var n1=parseInt(li1.innerHTML);
+          var n2=parseInt(li2.innerHTML);
+          return n1-n2;
+        })  //从小到大进行排序
+        //循环到此为止就已经将数组arr中的内容从小到大排好序了，下一步是要将这些排好的内容插入到ul中
+
+        //补充一个知识点，执行appendChild实际上是两个操作：1，将元素从原来的父级元素中删除 2，将元素放到新的父级元素中
+        for(var i=0;i<arr.length;i++){
+          oUl.appendChild(arr[i]); //这里的操作是：将一个元素从父级元素oUl中删除，再插回这个父级元素
+        }
+      };
+      ////////////////////////////////////////////////////////////////////////////////////////////
+
+      //实现对表格的排序
+      var oTab=document.getElementById('tlb1');
+      var arr1=[];
+      var oBtn2=document.getElementById('but2');
+
+      oBtn2.onclick=function(){
+        for(var i=0;i<oTab.tBodies[0].rows.length;i++){
+          arr1[i]=oTab.tBodies[0].rows[i];  //把表格中所有的tr都放入数组arr1中
+        }
+        arr1.sort(function(tr1,tr2){
+          var n1=parseInt(tr1.cells[0].innerHTML);
+          var n2=parseInt(tr2.cells[0].innerHTML);
+          return n1-n2;
+        })
+        for(var i=0;i<arr1.length;i++){
+          oTab.tBodies[0].appendChild(arr1[i]);
+        };
+      };
+
+    }
+    </script>
+  </head>
+  <body>
+    <ul id='ul1'>
+      <li>23</li>
+      <li>67</li>
+      <li>1</li>
+      <li>245</li>
+      <li>62</li>
+      <li>55</li>
+    </ul>
+    <button type="button" name="button" id='but1'>排序</button>
+
+    <button type="button" name="button" id='but2'>排序</button>
+    <table id='tlb1' border="1px" width="450px">
+      <thead>
+        <td>ID</td>
+        <td>name</td>
+        <td>age</td>
+        <td>操作</td>
+      </thead>
+      <tbody>
+        <tr>
+          <td>5</td>
+          <td>QWaa</td>
+          <td>21</td>
+          <td><a href="javascript:;">删除</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>小明</td>
+          <td>22</td>
+          <td><a href="javascript:;">删除</a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>小黑</td>
+          <td>20</td>
+          <td><a href="javascript:;">删除</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>小黄</td>
+          <td>10</td>
+          <td><a href="javascript:;">删除</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>小何</td>
+          <td>18</td>
+          <td><a href="javascript:;">删除</a></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>大明</td>
+          <td>18</td>
+          <td><a href="javascript:;">删除</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+
+
+</html>
