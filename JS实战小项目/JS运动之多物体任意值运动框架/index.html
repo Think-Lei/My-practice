@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>JS运动之多物体任意值运动框架，可以改变任意属性</title>
+    <style>
+    div{
+      width: 200px;
+      height: 100px;
+      background-color: yellow;
+      float:left;
+      margin-left: 20px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="div1">变高</div>
+    <div id="div2">变宽</div>
+    <div id="div3">字体变大</div>
+  </body>
+   <script type="text/javascript">
+   oDiv1=document.getElementById('div1');
+   oDiv2=document.getElementById('div2');
+   oDiv3=document.getElementById('div3');
+
+   function getStyle(obj,name){ //用来获取非行间样式，下面的做法是为了兼容浏览器
+     if(obj.currentStyle){  //如果浏览器支持currentStyle
+       return obj.currentStyle[name];
+     }
+     else{
+       return getComputedStyle(obj,false)[name];//如果浏览器支持getComputedStyle
+     }
+   }
+
+   function startMove(obj,atrr,iTarget){  //此时的运动框架增加了一个属性的参数，用来给不同的属性带来运动效果
+     clearInterval(obj.timer);
+     obj.timer=setInterval(function(){
+       var cur=parseInt(getStyle(obj,atrr));
+       var speed=(iTarget-cur)/6;
+       speed=speed>0?Math.ceil(speed):Math.floor(speed);
+
+       if(cur==iTarget){
+         clearInterval(obj.timer);
+       }
+       else{
+         obj.style[atrr]=cur+speed+'px';
+       }
+     },30);
+   };
+//展示变高的效果
+   oDiv1.onmouseover=function(){
+     startMove(this,'height',400);
+   };
+   oDiv1.onmouseout=function(){
+     startMove(this,'height',100);
+   }
+//展示变宽的效果
+   oDiv2.onmouseover=function(){
+     startMove(this,'width',700);
+   };
+   oDiv2.onmouseout=function(){
+     startMove(this,'width',200);
+   }
+//展示字体变大的效果
+  oDiv3.onmouseover=function(){
+    startMove(this,'font-size',24);
+  };
+  oDiv3.onmouseout=function(){
+    startMove(this,'font-size',14);
+  }
+   </script>
+</html>
